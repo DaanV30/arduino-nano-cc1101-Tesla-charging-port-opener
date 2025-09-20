@@ -10,19 +10,13 @@ This file is only allowed to use on youw own T
 This file only opens the charging port of T
 This file only works in the EU
 
-
 how to connect the CC1101 to Arduino Nano
-+----------------+-------------------+----------------------------+
-| CC1101 Pin     | Arduino Nano Pin  | Notes                      |
-+----------------+-------------------+----------------------------+
-| GDO0           | D2                | Optional: interrupt / status |
-| GDO2           | D3                | Optional: interrupt / status |
-| CSN / CS       | D10               | SPI Chip Select            |
-| SCK            | D13               | SPI Clock                  |
-| MOSI           | D11               | SPI Master Out             |
-| MISO           | D12               | SPI Master In              |
-| VCC            | 3.3V              | Make sure it’s 3.3V, not 5V! |
-| GND            | GND               | Ground                     |
-| VCO / VCC_RF   | 3.3V              | Some modules have extra RF supply |
-+----------------+-------------------+----------------------------+
-
+🔹 Arduino Nano D2  → CC1101 GDO0    (optional: interrupt / status) ⚡
+🔹 Arduino Nano D3  → CC1101 GDO2    (optional: interrupt / status) ⚡
+🔹 Arduino Nano D10 → CC1101 CSN/CS  (SPI Chip Select) 🟢
+🔹 Arduino Nano D11 → CC1101 MOSI    (SPI Master Out) 📨
+🔹 Arduino Nano D12 → CC1101 MISO    (SPI Master In) 📩
+🔹 Arduino Nano D13 → CC1101 SCK     (SPI Clock) ⏱️
+🔹 Arduino Nano 3.3V → CC1101 VCC    (do NOT use 5V!) 🔋
+🔹 Arduino Nano GND → CC1101 GND      (Ground) ⚫
+🔹 Arduino Nano 3.3V → CC1101 VCO/VCC_RF (if present, extra RF supply) 🌐
