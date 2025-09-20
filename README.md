@@ -1,8 +1,8 @@
 # arduino-nano-cc1101-T-charging-port-opener
 
-////////////////////////////////////////////////
+
 created by daan_tech1
-////////////////////////////////////////////////
+
 
 This file is only for educational purposes only
 This file is only allowed to use on youw own T
