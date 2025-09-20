@@ -1,0 +1,63 @@
+#include <SPI.h>
+#include <ELECHOUSE_CC1101_SRC_DRV.h>
+
+// --- Configuratie ---
+const float FREQUENCY_MHZ = 433.920;
+const uint8_t PA_LEVEL = 0; // laag vermogen voor veilig testen
+const unsigned long TX_INTERVAL_MS = 500; // interval tussen bursts
+
+// RAW-data van Flipper Zero
+const int16_t rawData[] = {
+  9175, -13444, 131, -2386, 1119, -32700, 165, -294, 97, -2928, 297, -98
+  // ... plak hier de volledige array uit je bestand
+};
+const size_t rawDataLen = sizeof(rawData)/sizeof(rawData[0]);
+
+unsigned long lastTx = 0;
+
+void setup() {
+  Serial.begin(115200);
+  delay(50);
+  Serial.println(F("CC1101 RAW-subGHz transmissie - Flipper Zero data"));
+
+  // Initialiseer CC1101
+  ELECHOUSE_cc1101.Init();
+  ELECHOUSE_cc1101.setCCMode(1);
+  ELECHOUSE_cc1101.setModulation(2); // 2-FSK
+  ELECHOUSE_cc1101.setMHZ(FREQUENCY_MHZ);
+  ELECHOUSE_cc1101.setPA(PA_LEVEL);
+  delay(20);
+
+  Serial.println(F("Start transmissie..."));
+}
+
+void loop() {
+  unsigned long now = millis();
+  if (now - lastTx >= TX_INTERVAL_MS) {
+    lastTx = now;
+    sendRawFlipper();
+  }
+}
+
+// Functie om de Flipper RAW-data te zenden
+void sendRawFlipper() {
+  Serial.print(F("Zend RAW-pakket, lengte: "));
+  Serial.println(rawDataLen);
+
+  // Zet CC1101 in TX-modus
+  for (size_t i = 0; i < rawDataLen; i++) {
+    if (rawData[i] > 0) {
+      // zend HIGH gedurende rawData[i] microseconden
+      ELECHOUSE_cc1101.SetTx(); 
+      delayMicroseconds(rawData[i]);
+      ELECHOUSE_cc1101.setSidle();
+    } else {
+      // zend LOW gedurende abs(rawData[i]) microseconden
+      ELECHOUSE_cc1101.setSidle();
+      delayMicroseconds(-rawData[i]);
+    }
+  }
+
+  // Terug naar idle na burst
+  ELECHOUSE_cc1101.setSidle();
+}
